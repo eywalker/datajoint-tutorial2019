@@ -16,7 +16,7 @@ services:
       - lab
       - --ip=0.0.0.0
       - --allow-root
-      - --NotebookApp.token=$JUPYTER_PASSWORD
+      - --NotebookApp.token=edgar123
       - --no-browser
     depends_on:
       mysql:
