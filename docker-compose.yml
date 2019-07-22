@@ -1,0 +1,41 @@
+version: '2.4'
+
+services:
+  notebook:
+    build: .
+    environment:
+      - DJ_HOST=mysql
+      - DJ_USER=root
+      - DJ_PASS=simple
+      - JUPYTER_PASSWORD=testing
+      - DISPLAY
+    ports:
+      - "8888:8888"
+    entrypoint:
+      - jupyter 
+      - lab
+      - --ip=0.0.0.0
+      - --allow-root
+      - --NotebookApp.token=$JUPYTER_PASSWORD
+      - --no-browser
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./:/notebooks
+    networks:
+      - main
+
+  mysql:
+    image: raphaelguzman/mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=simple
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - main
+
+networks:
+  main:
